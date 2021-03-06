@@ -15,9 +15,9 @@ pipeline{
         // Clone from Git
         stage("Clone App from Git"){
             steps{
-                echo "====++++  Clone App from Git A++++===="
+                echo "====++++  Clone App from Git  ++++===="
                 git branch:"master", url: "https://github.com/mromdhani/08-jenkins-cicd-pipeline-maven-01-continious-integration.git"
-            }          
+            } 
         }
         // Build and Unit Test (Maven/JUnit)
         stage("Build and Unit Test (Maven/JUnit)"){
@@ -30,24 +30,23 @@ pipeline{
         // Static Code Analysis (SonarQube)
         stage("Static Code Analysis (SonarQube)"){
             steps{
-                 echo "====++++  Static Code Analysis (SonarQube) ++++===="
-                
-                 withSonarQubeEnv('my_sonarqube_in_docker') {  
-                      sh "mvn clean verify -DskipITs=true sonar:sonar -Dsonar.host.url=http://host.docker.internal:9000   -Dsonar.projectName=08-jenkins-cicd-pipeline-maven-01-continious-integration -Dsonar.projectKey=08-jenkins-cicd-pipeline-maven-01-continious-integration -Dsonar.projectVersion=$BUILD_NUMBER";
-                 }  
+                echo "====++++  Static Code Analysis (SonarQube) ++++===="                
+                withSonarQubeEnv('my_sonarqube_in_docker') {  
+                   sh "mvn clean verify -DskipITs=true sonar:sonar -Dsonar.host.url=http://host.docker.internal:9000 -Dsonar.projectName=08-jenkins-cicd-pipeline-maven-01-continious-integration -Dsonar.projectKey=08-jenkins-cicd-pipeline-maven-01-continious-integration -Dsonar.projectVersion=$BUILD_NUMBER";
+                }  
             }           
         }
         stage("Checking the Quality Gate") {
-                  steps {
-                       echo "====++++  Checking the returned SonarQube Quality Gate ++++===="
-                      timeout(time: 1, unit: 'HOURS') {
-                          // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                          // true = set pipeline to UNSTABLE, false = don't
-                          waitForQualityGate abortPipeline: true
-                      }
-                  }
+            steps {
+                echo "====++++  Checking the returned SonarQube Quality Gate ++++===="
+                timeout(time: 1, unit: 'HOURS') {
+                   // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                   // true = set pipeline to UNSTABLE, false = don't
+                   waitForQualityGate abortPipeline: true
+                }
+            }
         }
-          // Integration Test (Maven/JUnit)
+        // Integration Test (Maven/JUnit)
         stage("Integration Test (Maven/JUnit)"){
             steps{
                 echo "====++++  Integration Test (Maven/JUnit) ++++===="
@@ -58,6 +57,7 @@ pipeline{
        // Publication de l'artifact (Snaphot) surt nexus2
         stage("Publish to Nexus Repository Manager") {
             steps {
+                echo "====++++  Publish to Nexus Repository Manager ++++===="
                 script {
                     pom = readMavenPom file: "pom.xml";
                     filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
@@ -91,7 +91,5 @@ pipeline{
                 }
             }
         }
-    }
-   
+    }   
 }
-
