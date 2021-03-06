@@ -2,8 +2,8 @@
 ---
 
 ## Toolset for the CI Pipeline
-The example project for which we are implementing CI is a simple Maven project. In
-this chapter, we will see Jenkins working closely with many other tools. The following table
+The example project for which we are implementing CI is a simple Maven Java Web application. In
+this lab, we will see Jenkins working closely with many other tools. The following table
 contains the list of tools and technologies involved in everything that we will be seeing:
    The example project for which we are implementing CI is a simple Maven project. 
    
@@ -41,7 +41,7 @@ contains the list of tools and technologies involved in everything that we will 
    - From  "Administration" menu option, select "Configuration" option, then choose Web Hooks from its Dropdown
    - Configure the web hook
       - Give a name to the Web hook (for example my-webhook-to-jenkins)
-      - URL: `http: //host.docker.internal:8080/sonarqube-webhook /` (Use strictly this form)
+      - URL: `http://host.docker.internal:8080/sonarqube-webhook/` (Use strictly this form)
       - No need to fill in the secret as we are conversing anonymously with SonarQube.
 
 ### Starting Nexus et Creating a Repository and User
@@ -53,7 +53,7 @@ contains the list of tools and technologies involved in everything that we will 
   Connect to Nexus on `http://localhost:8081` and check it is running. 
   
   You have to login in order to administer Nexus.  The default username is `admin`, whereas to retrieve the password you need to run the following command:
-  
+
    ```shell
    docker exec -i my_nexus3 cat /nexus-data/admin.password
    ```
@@ -95,7 +95,7 @@ This is the structure of the CI pipeline:
 2. Upload the built artifacts to Nexus along with the POM file.
    
 The figure below shows the stages of the pipeline.
-![Pipeline](images/pipelineStages.png)
+![Pipeline](images/pipeline.png)
 
 
 
